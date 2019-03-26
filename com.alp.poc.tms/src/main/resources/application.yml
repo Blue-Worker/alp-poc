@@ -1,0 +1,19 @@
+spring:
+  http:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+
+server:
+  port: 80
+  servlet:
+    context-path: /tms
+    
+logging:
+  pattern: 
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%thread] %logger{15} - %msg%n"
+  level:
+    root: INFO
+    com:
+      alp: DEBUG 

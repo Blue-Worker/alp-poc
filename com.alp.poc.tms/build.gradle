@@ -1,0 +1,44 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.3.RELEASE'
+	id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.alp.poc.tms'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+task unpack(type: Copy) {
+    from zipTree(tasks.bootJar.outputs.files.singleFile)
+    into "build/dependency"
+}
+
+task dockerBuild(type:Exec) {
+
+	dependsOn build
+	
+    dependsOn bootJar
+    
+    dependsOn unpack
+
+    commandLine '/Applications/Docker.app/Contents/Resources/bin/docker', 'build', '.', '-t', 'tms'
+
+  	standardOutput = new ByteArrayOutputStream()
+	ext.output = {
+		return standardOutput.toString()
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	
+	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes:1.0.1.RELEASE'
+	
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
